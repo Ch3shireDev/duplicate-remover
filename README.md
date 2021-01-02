@@ -5,3 +5,7 @@ Program do usuwania duplikatów plików z katalogów. Program skanuje wszystkie 
 ## Użycie
 
 Program należy umieścić w głównym katalogu w którym zamierzamy dokonać czyszczenia.
+
+## Strona
+
+https://ch3shiredev.github.io/duplicate-remover/

@@ -1,5 +1,6 @@
-pyinstaller --noconfirm --onefile --console  "duplicate_removal.py"
-move .\dist\duplicate_removal.exe .
+pyinstaller --noconfirm --onefile --console  "duplicate_remover.py"
+move .\dist\*.exe .
 rmdir .\dist
 del /F/Q/S .\build
 del /F/Q/S .\build 
+del duplicate_remover.spec

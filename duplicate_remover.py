@@ -3,8 +3,7 @@ import sys
 import hashlib
 import os
 import logging
-from pathlib import Path
-from humanize import naturalsize
+import pathlib
 
 def get_sha(path):
     BUF_SIZE = 65536
@@ -25,13 +24,21 @@ def delete_file(path):
         pass
 
 def get_size(path):
-    return Path(path).stat().st_size
+    return pathlib.Path(path).stat().st_size
 
 def info(text):
     logging.info(text)
     print(text)
 
-print("Program usunie wszystkie duplikaty plikow z biezacego folderu i wszystkich mozliwych podfolderow. Nastepnie skasuje puste podfoldery.")
+def naturalsize(num, suffix='B'):
+    for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
+        if abs(num) < 1024.0:
+            return "%3.1f%s%s" % (num, unit, suffix)
+        num /= 1024.0
+    return "%.1f%s%s" % (num, 'Yi', suffix)
+
+
+print("Program usunie wszystkie duplikaty plikow z biezacego folderu i wszystkich mozliwych podfolderow. Nastepnie zostana skasowane puste podfoldery.")
 
 answer = None
 
@@ -78,6 +85,6 @@ while is_empty:
 
 size = naturalsize(total_size)
 
-info(f"Skasowano {number} duplikatów o łącznej objętości {size}.")
+info(f"Skasowano {number} duplikatow o lacznej objetosci {size}.")
 
-input("Program zakończył działanie. Wciśnij ENTER aby zamknąć okno.\n")
+input("Program zakonczyl dzialanie. Wcisnij ENTER aby zamknac okno.\n")

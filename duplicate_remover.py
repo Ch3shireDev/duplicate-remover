@@ -47,12 +47,14 @@ logging.basicConfig(filename="logs.txt", level=logging.INFO)
 info("Kasowanie duplikatow...")
 
 total_size = 0
+number = 0
 
 for file in glob.glob('./**', recursive=True):
     try:
         sha = get_sha(file)
         if sha in skroty:
             total_size += get_size(file)
+            number += 1
             delete_file(file)
             info(f"Usunieto plik {file}")
         else:
@@ -76,4 +78,6 @@ while is_empty:
 
 size = naturalsize(total_size)
 
-info(f"Skasowano {size} duplikatów.")
+info(f"Skasowano {number} duplikatów o łącznej objętości {size}.")
+
+input("Program zakończył działanie. Wciśnij ENTER aby zamknąć okno.\n")

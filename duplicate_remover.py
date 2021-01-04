@@ -37,6 +37,9 @@ def naturalsize(num, suffix='B'):
         num /= 1024.0
     return "%.1f%s%s" % (num, 'Yi', suffix)
 
+def get_created(file):
+    fname = pathlib.Path(file)
+    return fname.stat().st_ctime
 
 print("Program usunie wszystkie duplikaty plikow z biezacego folderu i wszystkich mozliwych podfolderow. Nastepnie zostana skasowane puste podfoldery.")
 
@@ -51,12 +54,28 @@ while answer != "t":
 skroty = set()
 logging.basicConfig(filename="logs.txt", level=logging.INFO)
 
-info("Kasowanie duplikatow...")
 
 total_size = 0
 number = 0
 
+info("Zbieranie listy plikow...")
+
+files = []
+
 for file in glob.glob('./**', recursive=True):
+    try:
+        created = get_created(file)
+        files.append((created, file))
+    except IOError as e:
+        continue
+    except:
+        exit()
+
+files.sort()
+
+info("Kasowanie duplikatow...")
+
+for _, file in files: 
     try:
         sha = get_sha(file)
         if sha in skroty:
@@ -65,6 +84,7 @@ for file in glob.glob('./**', recursive=True):
             delete_file(file)
             info(f"Usunieto plik {file}")
         else:
+            info(f"Pozostawiono plik {file}")
             skroty.add(sha)
 
     except IOError as e:
@@ -79,9 +99,12 @@ while is_empty:
     is_empty = False
     for _dir, a,b in os.walk('.'):
         if a == [] and b == []:
-            os.rmdir(_dir)
-            is_empty = True
-
+            try:
+                info(f"Usuwanie folderu {_dir}")
+                os.rmdir(_dir)
+                is_empty = True
+            except:
+                continue
 
 size = naturalsize(total_size)
 
